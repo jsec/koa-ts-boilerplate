@@ -1,0 +1,6 @@
+{
+  "extension": ["ts"],
+  "require": ["ts-node-register", "./test/harness.ts"],
+  "sepc": "test/**.*.spec.ts",
+  "recursive": true
+}
