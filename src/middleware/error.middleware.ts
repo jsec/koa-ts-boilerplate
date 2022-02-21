@@ -1,3 +1,4 @@
+import consola from 'consola';
 import { StatusCodes } from 'http-status-codes';
 import { isBoom } from '@hapi/boom';
 import Router from '@koa/router';
@@ -15,6 +16,7 @@ export const errorHandler: Router.Middleware = async (ctx: Context, next: Next) 
   try {
     await next();
   } catch (err) {
+    consola.error(err);
     if (isBoom(err)) {
       setErrorResponse(ctx, err.output.statusCode, err.message);
     } else {

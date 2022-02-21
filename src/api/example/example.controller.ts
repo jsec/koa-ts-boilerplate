@@ -1,4 +1,4 @@
-import { notFound } from '@hapi/boom';
+import { forbidden, notFound } from '@hapi/boom';
 import { Controller, Get, Path, Route } from 'tsoa';
 import { autoInjectable } from 'tsyringe';
 import { Example } from '../../db/models/example.model';
@@ -25,6 +25,10 @@ export class ExampleController extends Controller {
   @Get('{id}')
   public async getById(@Path() id: number): Promise<Example> {
     const result = await this.service.getById(id);
+
+    if (id === 1) {
+      throw forbidden();
+    }
 
     if (!result) {
       throw notFound();
