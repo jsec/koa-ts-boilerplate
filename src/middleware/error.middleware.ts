@@ -9,8 +9,8 @@ const setErrorResponse = (ctx: Context, statusCode: number, message: string) => 
   ctx.body = {
     message,
     correlationId: ctx.state.correlationId
-  } ;
-}
+  };
+};
 
 export const errorHandler: Router.Middleware = async (ctx: Context, next: Next) => {
   try {
@@ -24,4 +24,3 @@ export const errorHandler: Router.Middleware = async (ctx: Context, next: Next) 
     }
   }
 };
-
