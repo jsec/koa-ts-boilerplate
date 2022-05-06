@@ -7,7 +7,12 @@ dotenv.config({ path: resolve(__dirname, '../../.env') });
 
 const config = {
   client: 'pg',
-  connection: process.env.DATABASE_URL,
+  connection: {
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME
+  },
   migrations: {
     directory: 'migrations',
     stub: 'stubs/migration.stub.ts'
