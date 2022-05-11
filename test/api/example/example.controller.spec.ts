@@ -1,8 +1,8 @@
 import { ExampleController } from '../../../src/api/example/example.controller';
-import { container, expect } from '../../harness';
+import { Container, expect } from '../../harness';
 
 describe('Example Controller', () => {
-  const controller = container.resolve(ExampleController);
+  const controller = Container.get(ExampleController);
 
   describe('getAll', () => {
     it('should return a value from the service', async () => {

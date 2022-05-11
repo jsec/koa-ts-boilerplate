@@ -1,23 +1,25 @@
 import 'reflect-metadata';
-import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
 import logger from 'koa-logger';
-import Router from '@koa/router';
-import cors from '@koa/cors';
 import helmet from 'koa-helmet';
-import { RegisterRoutes } from '../build/routes';
+import { useContainer, useKoaServer } from 'routing-controllers';
+import cors from '@koa/cors';
+import Container from 'typedi';
+import Koa from 'koa';
 import { errorHandler } from './middleware/error.middleware';
+import { ExampleController } from './api/example/example.controller';
 
-const app = new Koa();
-app.use(logger());
-app.use(cors());
-app.use(helmet());
-app.use(bodyParser());
-app.use(errorHandler);
+useContainer(Container);
 
-const router = new Router();
-RegisterRoutes(router);
+const koa = new Koa();
 
-app.use(router.routes()).use(router.allowedMethods());
+koa.use(logger());
+koa.use(helmet());
+koa.use(cors());
+koa.use(errorHandler);
+
+const app = useKoaServer(koa, {
+  routePrefix: '/api',
+  controllers: [ExampleController]
+});
 
 export default app;

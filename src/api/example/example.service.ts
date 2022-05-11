@@ -1,6 +1,8 @@
 import { Maybe, NonEmptyList } from 'purify-ts';
+import { Service } from 'typedi';
 import { Example } from '../../db/models/example.model';
 
+@Service()
 export class ExampleService {
   public async getAll(): Promise<Maybe<NonEmptyList<Example>>> {
     const result = await Example.query();
