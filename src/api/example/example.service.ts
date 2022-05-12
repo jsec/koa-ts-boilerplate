@@ -1,16 +1,16 @@
-import { Maybe, NonEmptyList } from 'purify-ts';
+import { A, D, O, Option } from '@mobily/ts-belt';
 import { Service } from 'typedi';
 import { Example } from '../../db/models/example.model';
 
 @Service()
 export class ExampleService {
-  public async getAll(): Promise<Maybe<NonEmptyList<Example>>> {
+  public async getAll(): Promise<Option<Example[]>> {
     const result = await Example.query();
-    return NonEmptyList.fromArray(result);
+    return O.fromPredicate(result, A.isNotEmpty);
   }
 
-  public async getById(id: number): Promise<Maybe<Example>> {
+  public async getById(id: number): Promise<Option<Example>> {
     const result = await Example.query().where('id', id).first();
-    return Maybe.fromNullable(result);
+    return O.fromPredicate(result, D.isNotEmpty);
   }
 }
