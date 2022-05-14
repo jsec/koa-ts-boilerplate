@@ -1,5 +1,5 @@
-import { notFound } from '@hapi/boom';
-import { Maybe, NonEmptyList } from 'purify-ts';
+import { Boom, notFound } from '@hapi/boom';
+import { Either, NonEmptyList } from 'purify-ts';
 import { Controller, Get, Path, Route } from 'tsoa';
 import { autoInjectable } from 'tsyringe';
 import { Example } from '../../db/models/example.model';
@@ -13,22 +13,16 @@ export class ExampleController extends Controller {
   }
 
   @Get()
-  public async getAll(): Promise<Maybe<NonEmptyList<Example>>> {
+  public async getAll(): Promise<Either<Boom, NonEmptyList<Example>>> {
     const result = await this.service.getAll();
 
-    if (result.isNothing()) throw notFound();
-
-    return result;
+    return result.toEither(notFound('Resource not found'));
   }
 
   @Get('{id}')
-  public async getById(@Path() id: number): Promise<Maybe<Example>> {
+  public async getById(@Path() id: number): Promise<Either<Boom, Example>> {
     const result = await this.service.getById(id);
 
-    if (!result) {
-      throw notFound();
-    }
-
-    return result;
+    return result.toEither(notFound('Resource not found'));
   }
 }
