@@ -3,7 +3,6 @@ import { StatusCodes } from 'http-status-codes';
 import { Controller, Get, Path, Response, Route } from 'tsoa';
 import { autoInjectable } from 'tsyringe';
 import { ApiResponse } from '../../core/entities/types/api-response.type';
-import { Example } from '../../db/models/example.model';
 import { IExample } from './dto/example.interface';
 import { ExampleService } from './example.service';
 
@@ -15,11 +14,11 @@ export class ExampleController extends Controller {
   }
 
   @Get()
-  @Response<ApiResponse<Example[]>>('200')
+  @Response<ApiResponse<IExample[]>>('200')
   public async getAll(): Promise<ApiResponse<IExample[]>> {
     const result = await this.service.getAll();
 
-    const response = result.caseOf<ApiResponse<Example[]>>({
+    const response = result.caseOf<ApiResponse<IExample[]>>({
       Just: value => value,
       Nothing: () => createHttpError(StatusCodes.NOT_FOUND, 'Resource could not be found')
     });
@@ -28,11 +27,11 @@ export class ExampleController extends Controller {
   }
 
   @Get('{id}')
-  @Response<ApiResponse<Example>>('200')
+  @Response<ApiResponse<IExample>>('200')
   public async getById(@Path() id: number): Promise<ApiResponse<IExample>> {
     const result = await this.service.getById(id);
 
-    const response = result.caseOf<ApiResponse<Example>>({
+    const response = result.caseOf<ApiResponse<IExample>>({
       Just: value => value,
       Nothing: () => createHttpError(StatusCodes.NOT_FOUND, 'Resource could not be found')
     });
