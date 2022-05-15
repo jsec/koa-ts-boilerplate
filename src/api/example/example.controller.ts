@@ -2,9 +2,9 @@ import createHttpError from 'http-errors';
 import { StatusCodes } from 'http-status-codes';
 import { Controller, Get, Path, Response, Route } from 'tsoa';
 import { autoInjectable } from 'tsyringe';
-import { IExample } from '../../core/entities/dto/example.interface';
 import { ApiResponse } from '../../core/entities/types/api-response.type';
 import { Example } from '../../db/models/example.model';
+import { IExample } from './dto/example.interface';
 import { ExampleService } from './example.service';
 
 @autoInjectable()

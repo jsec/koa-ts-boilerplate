@@ -9,6 +9,6 @@
   "routes": {
     "routesDir": "build",
     "middleware": "koa",
-    "iocModule": "src/core/ioc.container.ts"
+    "iocModule": "src/core/ioc/ioc.container.ts"
   }
 }
