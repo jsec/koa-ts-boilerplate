@@ -1,8 +1,10 @@
-import { notFound } from '@hapi/boom';
-import { Maybe, NonEmptyList } from 'purify-ts';
-import { Controller, Get, Path, Route } from 'tsoa';
+import createHttpError from 'http-errors';
+import { StatusCodes } from 'http-status-codes';
+import { Controller, Get, Path, Response, Route } from 'tsoa';
 import { autoInjectable } from 'tsyringe';
+import { ApiResponse } from '../../core/entities/types/api-response.type';
 import { Example } from '../../db/models/example.model';
+import { IExample } from './dto/example.interface';
 import { ExampleService } from './example.service';
 
 @autoInjectable()
@@ -13,22 +15,28 @@ export class ExampleController extends Controller {
   }
 
   @Get()
-  public async getAll(): Promise<Maybe<NonEmptyList<Example>>> {
+  @Response<ApiResponse<Example[]>>('200')
+  public async getAll(): Promise<ApiResponse<IExample[]>> {
     const result = await this.service.getAll();
 
-    if (result.isNothing()) throw notFound();
+    const response = result.caseOf<ApiResponse<Example[]>>({
+      Just: value => value,
+      Nothing: () => createHttpError(StatusCodes.NOT_FOUND, 'Resource could not be found')
+    });
 
-    return result;
+    return response;
   }
 
   @Get('{id}')
-  public async getById(@Path() id: number): Promise<Maybe<Example>> {
+  @Response<ApiResponse<Example>>('200')
+  public async getById(@Path() id: number): Promise<ApiResponse<IExample>> {
     const result = await this.service.getById(id);
 
-    if (!result) {
-      throw notFound();
-    }
+    const response = result.caseOf<ApiResponse<Example>>({
+      Just: value => value,
+      Nothing: () => createHttpError(StatusCodes.NOT_FOUND, 'Resource could not be found')
+    });
 
-    return result;
+    return response;
   }
 }
