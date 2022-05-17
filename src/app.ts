@@ -13,7 +13,11 @@ import { responseHandler } from './middleware/response.middleware';
 const app = new Koa();
 app.use(logger());
 app.use(cors());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: process.env.NODE_ENV !== 'development'
+  })
+);
 app.use(bodyParser());
 app.use(errorHandler);
 app.use(responseHandler);
@@ -23,8 +27,10 @@ RegisterRoutes(router);
 
 app.use(router.routes()).use(router.allowedMethods());
 
-import('../build/swagger.json').then(spec => {
-  app.use(koaSwagger({ swaggerOptions: { spec } }));
-});
+if (process.env.NODE_ENV === 'development') {
+  import('../build/swagger.json').then(spec => {
+    app.use(koaSwagger({ swaggerOptions: { spec } }));
+  });
+}
 
 export default app;

@@ -1,6 +1,6 @@
 import createHttpError from 'http-errors';
 import { StatusCodes } from 'http-status-codes';
-import { Controller, Get, Path, Response, Route } from 'tsoa';
+import { Controller, Get, Path, Route } from 'tsoa';
 import { autoInjectable } from 'tsyringe';
 import { ApiResponse } from '../../core/entities/types/api-response.type';
 import { IExample } from './dto/example.interface';
@@ -14,7 +14,6 @@ export class ExampleController extends Controller {
   }
 
   @Get()
-  @Response<ApiResponse<IExample[]>>('200')
   public async getAll(): Promise<ApiResponse<IExample[]>> {
     const result = await this.service.getAll();
 
@@ -27,7 +26,6 @@ export class ExampleController extends Controller {
   }
 
   @Get('{id}')
-  @Response<ApiResponse<IExample>>('200')
   public async getById(@Path() id: number): Promise<ApiResponse<IExample>> {
     const result = await this.service.getById(id);
 
